@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS CLF-C02 Exam Practice Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container fade-in">
+        <header>
+            <h1>AWS CLF-C02 Assistant</h1>
+            <div class="stats">
+                <span>Question <span id="current-index">1</span> of <span id="total-questions">0</span></span>
+                <span class="score-box">Score: <span id="current-score">0</span></span>
+            </div>
+        </header>
+
+        <main>
+            <div id="question-container" class="question-card">
+                <span id="q-id-display" class="question-id">Question 1</span>
+                <p id="q-text" class="question-text">Loading question...</p>
+                <div id="options-list" class="options-list">
+                    <!-- Options injected here -->
+                </div>
+            </div>
+
+            <section id="feedback-section" class="feedback-section fade-in">
+                <div id="status-badge" class="status-badge">Correct</div>
+                <div class="explanation-box">
+                    <span class="explanation-title">Explanation:</span>
+                    <p id="explanation-text"></p>
+                </div>
+            </section>
+
+            <div class="controls">
+                <div class="left-controls">
+                    <div class="jump-section">
+                        <span>Jump to:</span>
+                        <input type="number" id="jump-input" class="jump-input" placeholder="Q#">
+                        <button id="jump-btn" class="btn-secondary">Go</button>
+                    </div>
+                </div>
+                <div class="right-controls">
+                    <button id="submit-btn" class="btn-primary">Submit Answer</button>
+                    <button id="next-btn" class="btn-primary" style="display: none;">Next Question</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

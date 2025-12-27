@@ -1,0 +1,17 @@
+# Data Files
+*.pdf
+*.txt
+*.json
+!questions.json
+
+# Python Scripts
+*.py
+__pycache__/
+
+# Node
+node_modules/
+package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
