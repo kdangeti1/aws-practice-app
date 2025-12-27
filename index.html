@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,13 +10,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <div class="container fade-in">
+    <div id="login-overlay" class="login-overlay">
+        <div class="login-box fade-in">
+            <h2>AWS Practice Login</h2>
+            <p>Enter your ID to sync your progress</p>
+            <input type="text" id="login-id" class="login-input" placeholder="User ID">
+            <input type="password" id="login-pass" class="login-input" placeholder="Password">
+            <button id="login-btn" class="btn-primary" style="width: 100%;">Login</button>
+            <p id="login-error" class="login-error"></p>
+        </div>
+    </div>
+
+    <div class="container fade-in" id="app-container" style="display: none;">
         <header>
             <h1>AWS CLF-C02 Assistant</h1>
             <div class="stats">
                 <span>Question <span id="current-index">1</span> of <span id="total-questions">0</span></span>
-                <span class="score-box">Score: <span id="current-score">0</span></span>
+                <div class="score-container">
+                    <span class="score-box">Score: <span id="current-score">0</span></span>
+                    <button id="reset-btn" class="btn-reset" title="Reset Score and Progress">↺</button>
+                </div>
             </div>
         </header>
 
@@ -54,4 +70,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>

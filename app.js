@@ -2,8 +2,17 @@ let questions = [];
 let currentIndex = 0;
 let score = 0;
 let answeredCount = 0;
+let userLoginID = "";
 
 // DOM Elements
+const loginOverlay = document.getElementById('login-overlay');
+const loginBtn = document.getElementById('login-btn');
+const loginIDInput = document.getElementById('login-id');
+const loginPassInput = document.getElementById('login-pass');
+const loginError = document.getElementById('login-error');
+const appContainer = document.getElementById('app-container');
+const resetBtn = document.getElementById('reset-btn');
+
 const currentIdxEl = document.getElementById('current-index');
 const totalQuestionsEl = document.getElementById('total-questions');
 const currentScoreEl = document.getElementById('current-score');
@@ -23,7 +32,7 @@ async function loadQuestions() {
         const response = await fetch('questions.json');
         questions = await response.json();
         totalQuestionsEl.textContent = questions.length;
-        renderQuestion();
+        // Don't render until login
     } catch (error) {
         console.error('Error loading questions:', error);
         qTextEl.textContent = 'Failed to load questions. Make sure questions.json is in the same directory.';
@@ -46,6 +55,11 @@ function renderQuestion() {
     qIdDisplayEl.textContent = `Question ${q.id}`;
     qTextEl.textContent = q.question;
     optionsListEl.innerHTML = '';
+
+    // Save progress
+    if (userLoginID) {
+        localStorage.setItem(`aws_progress_${userLoginID}`, currentIndex);
+    }
 
     Object.entries(q.options).forEach(([label, text]) => {
         const item = document.createElement('div');
@@ -90,6 +104,12 @@ function submitAnswer() {
     answeredCount++;
     if (isCorrect) score++;
     currentScoreEl.textContent = `${score} / ${answeredCount}`;
+
+    // Save Score
+    if (userLoginID) {
+        localStorage.setItem(`aws_score_${userLoginID}`, score);
+        localStorage.setItem(`aws_answered_${userLoginID}`, answeredCount);
+    }
 
     // Show Feedback
     statusBadgeEl.textContent = isCorrect ? 'Correct' : 'Incorrect';
@@ -149,6 +169,67 @@ nextBtn.onclick = nextQuestion;
 jumpBtn.onclick = jumpToQuestion;
 jumpInput.onkeypress = (e) => {
     if (e.key === 'Enter') jumpToQuestion();
+};
+
+// Login Logic
+loginBtn.onclick = performLogin;
+loginPassInput.onkeypress = (e) => {
+    if (e.key === 'Enter') performLogin();
+};
+
+function performLogin() {
+    const id = loginIDInput.value.trim();
+    const pass = loginPassInput.value;
+
+    if (!id) {
+        loginError.textContent = "Please enter a User ID";
+        return;
+    }
+
+    if (pass !== "awstest") {
+        loginError.textContent = "Incorrect password";
+        return;
+    }
+
+    userLoginID = id;
+    loginOverlay.style.display = 'none';
+    appContainer.style.display = 'block';
+
+    // Load saved progress
+    const savedIndex = localStorage.getItem(`aws_progress_${userLoginID}`);
+    if (savedIndex !== null) {
+        currentIndex = parseInt(savedIndex);
+        if (currentIndex >= questions.length) currentIndex = 0;
+    }
+
+    // Load saved score
+    const savedScore = localStorage.getItem(`aws_score_${userLoginID}`);
+    const savedAnswered = localStorage.getItem(`aws_answered_${userLoginID}`);
+    if (savedScore !== null && savedAnswered !== null) {
+        score = parseInt(savedScore);
+        answeredCount = parseInt(savedAnswered);
+        currentScoreEl.textContent = `${score} / ${answeredCount}`;
+    } else {
+        score = 0;
+        answeredCount = 0;
+        currentScoreEl.textContent = `0`;
+    }
+
+    renderQuestion();
+}
+
+resetBtn.onclick = () => {
+    if (confirm("Are you sure you want to reset your score and progress for this user?")) {
+        localStorage.removeItem(`aws_progress_${userLoginID}`);
+        localStorage.removeItem(`aws_score_${userLoginID}`);
+        localStorage.removeItem(`aws_answered_${userLoginID}`);
+
+        currentIndex = 0;
+        score = 0;
+        answeredCount = 0;
+        currentScoreEl.textContent = `0`;
+        renderQuestion();
+    }
 };
 
 // Init
