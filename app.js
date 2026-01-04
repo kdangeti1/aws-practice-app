@@ -3,12 +3,15 @@ let currentIndex = 0;
 let score = 0;
 let answeredCount = 0;
 let userLoginID = "";
+let currentExam = "clf-c02";
 
 // DOM Elements
 const loginOverlay = document.getElementById('login-overlay');
 const loginBtn = document.getElementById('login-btn');
 const loginIDInput = document.getElementById('login-id');
 const loginPassInput = document.getElementById('login-pass');
+const examSelect = document.getElementById('exam-select');
+const examDisplay = document.getElementById('exam-display');
 const loginError = document.getElementById('login-error');
 const appContainer = document.getElementById('app-container');
 const resetBtn = document.getElementById('reset-btn');
@@ -29,13 +32,14 @@ const jumpBtn = document.getElementById('jump-btn');
 
 async function loadQuestions() {
     try {
-        const response = await fetch('questions.json');
+        const file = currentExam === 'clf-c02' ? 'questions.json' : 'questions_aif_c01.json';
+        const response = await fetch(file);
         questions = await response.json();
         totalQuestionsEl.textContent = questions.length;
-        // Don't render until login
+        examDisplay.textContent = currentExam === 'clf-c02' ? 'Cloud Practitioner (CLF-C02)' : 'AI Practitioner (AIF-C01)';
     } catch (error) {
         console.error('Error loading questions:', error);
-        qTextEl.textContent = 'Failed to load questions. Make sure questions.json is in the same directory.';
+        qTextEl.textContent = 'Failed to load questions. Make sure JSON files are in the same directory.';
     }
 }
 
@@ -58,7 +62,7 @@ function renderQuestion() {
 
     // Save progress
     if (userLoginID) {
-        localStorage.setItem(`aws_progress_${userLoginID}`, currentIndex);
+        localStorage.setItem(`aws_progress_${currentExam}_${userLoginID}`, currentIndex);
     }
 
     Object.entries(q.options).forEach(([label, text]) => {
@@ -107,8 +111,8 @@ function submitAnswer() {
 
     // Save Score
     if (userLoginID) {
-        localStorage.setItem(`aws_score_${userLoginID}`, score);
-        localStorage.setItem(`aws_answered_${userLoginID}`, answeredCount);
+        localStorage.setItem(`aws_score_${currentExam}_${userLoginID}`, score);
+        localStorage.setItem(`aws_answered_${currentExam}_${userLoginID}`, answeredCount);
     }
 
     // Show Feedback
@@ -180,6 +184,7 @@ loginPassInput.onkeypress = (e) => {
 function performLogin() {
     const id = loginIDInput.value.trim();
     const pass = loginPassInput.value;
+    const selectedExam = examSelect.value;
 
     if (!id) {
         loginError.textContent = "Please enter a User ID";
@@ -192,19 +197,29 @@ function performLogin() {
     }
 
     userLoginID = id;
+    currentExam = selectedExam;
+
     loginOverlay.style.display = 'none';
     appContainer.style.display = 'block';
 
+    startExamSession();
+}
+
+async function startExamSession() {
+    await loadQuestions();
+
     // Load saved progress
-    const savedIndex = localStorage.getItem(`aws_progress_${userLoginID}`);
+    const savedIndex = localStorage.getItem(`aws_progress_${currentExam}_${userLoginID}`);
     if (savedIndex !== null) {
         currentIndex = parseInt(savedIndex);
         if (currentIndex >= questions.length) currentIndex = 0;
+    } else {
+        currentIndex = 0;
     }
 
     // Load saved score
-    const savedScore = localStorage.getItem(`aws_score_${userLoginID}`);
-    const savedAnswered = localStorage.getItem(`aws_answered_${userLoginID}`);
+    const savedScore = localStorage.getItem(`aws_score_${currentExam}_${userLoginID}`);
+    const savedAnswered = localStorage.getItem(`aws_answered_${currentExam}_${userLoginID}`);
     if (savedScore !== null && savedAnswered !== null) {
         score = parseInt(savedScore);
         answeredCount = parseInt(savedAnswered);
@@ -219,10 +234,10 @@ function performLogin() {
 }
 
 resetBtn.onclick = () => {
-    if (confirm("Are you sure you want to reset your score and progress for this user?")) {
-        localStorage.removeItem(`aws_progress_${userLoginID}`);
-        localStorage.removeItem(`aws_score_${userLoginID}`);
-        localStorage.removeItem(`aws_answered_${userLoginID}`);
+    if (confirm(`Are you sure you want to reset your score and progress for ${currentExam.toUpperCase()}?`)) {
+        localStorage.removeItem(`aws_progress_${currentExam}_${userLoginID}`);
+        localStorage.removeItem(`aws_score_${currentExam}_${userLoginID}`);
+        localStorage.removeItem(`aws_answered_${currentExam}_${userLoginID}`);
 
         currentIndex = 0;
         score = 0;
@@ -233,4 +248,4 @@ resetBtn.onclick = () => {
 };
 
 // Init
-loadQuestions();
+// Questions loaded after login selection

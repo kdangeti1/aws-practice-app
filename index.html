@@ -18,6 +18,10 @@
             <p>Enter your ID to sync your progress</p>
             <input type="text" id="login-id" class="login-input" placeholder="User ID">
             <input type="password" id="login-pass" class="login-input" placeholder="Password">
+            <select id="exam-select" class="login-input">
+                <option value="clf-c02">AWS Cloud Practitioner (CLF-C02)</option>
+                <option value="aif-c01">AWS AI Practitioner (AIF-C01)</option>
+            </select>
             <button id="login-btn" class="btn-primary" style="width: 100%;">Login</button>
             <p id="login-error" class="login-error"></p>
         </div>
@@ -25,7 +29,10 @@
 
     <div class="container fade-in" id="app-container" style="display: none;">
         <header>
-            <h1>AWS CLF-C02 Assistant</h1>
+            <div>
+                <h1 id="app-title">AWS Practice Assistant</h1>
+                <p id="exam-display" class="exam-display"></p>
+            </div>
             <div class="stats">
                 <span>Question <span id="current-index">1</span> of <span id="total-questions">0</span></span>
                 <div class="score-container">

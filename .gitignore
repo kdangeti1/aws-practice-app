@@ -3,6 +3,7 @@
 *.txt
 *.json
 !questions.json
+!questions_aif_c01.json
 
 # Python Scripts
 *.py

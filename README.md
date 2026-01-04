@@ -1,9 +1,12 @@
-# AWS CLF-C02 Exam Practice Assistant
+# AWS Exam Practice Assistant
 
-A premium web-based practice tool for the AWS Certified Cloud Practitioner (CLF-C02) exam, featuring 719 questions extracted from official study materials.
+A premium web-based practice tool for AWS Certification exams (CLF-C02 and AIF-C01), featuring over 1,000 questions extracted from official study materials.
 
+## 🚀 Supported Exams
+- **AWS Certified Cloud Practitioner (CLF-C02)**: 719 Questions
+- **AWS Certified AI Practitioner (AIF-C01)**: 334 Questions
 ## 🚀 Features
-- **719 Questions**: Complete database with all options and detailed explanations.
+- **Comprehensive Question Bank**: Full database with all options and detailed explanations.
 - **Smart Validation**: Immediate feedback on correct/incorrect answers.
 - **Jump to Question**: Skip to any specific question number to focus on what matters.
 - **Sequential Learning**: Maintains your progress and order throughout the session.
@@ -12,7 +15,7 @@ A premium web-based practice tool for the AWS Certified Cloud Practitioner (CLF-
 ## 🛠️ Tech Stack
 - **HTML5/CSS3**: Custom dark-mode UI with AWS-inspired aesthetics.
 - **JavaScript**: Pure vanilla JS for high performance.
-- **JSON**: Structured question database.
+- **JSON**: Structured question databases.
 
 ## 📖 How to Use
 1. Clone the repository.
@@ -20,4 +23,4 @@ A premium web-based practice tool for the AWS Certified Cloud Practitioner (CLF-
 3. Or, access it via the published GitHub Pages link.
 
 ---
-*Disclaimer: This tool is intended for personal study purposes to assist in preparation for the AWS Certified Cloud Practitioner exam.*
+*Disclaimer: This tool is intended for personal study purposes to assist in preparation for AWS Certification exams.*
